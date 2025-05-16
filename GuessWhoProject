@@ -1,0 +1,53 @@
+################### Character Dictonary ################### 
+characters = [
+    {"name": "Alice", "glasses": True, "hat": False, "beard": False, "blonde": True},
+    {"name": "Bob", "glasses": False, "hat": True, "beard": True, "blonde": False},
+    {"name": "Carol", "glasses": True, "hat": True, "beard": False, "blonde": False},
+    {"name": "Dave", "glasses": False, "hat": False, "beard": True, "blonde": True},
+    {"name": "Eve", "glasses": True, "hat": False, "beard": False, "blonde": False}
+]
+
+traits = ["glasses", "hat", "beard", "blonde"]
+##################### Game Functions ###################### 
+
+# Pick a secret character
+secret = random.choice(characters)
+
+def display_characters(char_list):
+    print("\nRemaining Characters:")
+    for char in char_list:
+        print(" -", char["name"])
+    print()
+
+def main():
+    print("Welcome to Guess Who!\nAsk yes/no questions about the character's traits to narrow them down.")
+    remaining = characters.copy()
+    guesses = 0
+
+    while True:
+        display_characters(remaining)
+        print(f"Available traits: {', '.join(traits)}")
+        question = input("Ask a question (e.g., 'Does the person have glasses?'): ").lower().strip()
+
+        # Process input
+        for trait in traits:
+            if trait in question:
+                answer = secret[trait]
+                print(f"Answer: {'Yes' if answer else 'No'}")
+                remaining = [char for char in remaining if char[trait] == answer]
+                guesses += 1
+                break
+        else:
+            if question.startswith("is it") or question.startswith("is the person"):
+                name_guess = question.split()[-1].capitalize()
+                if name_guess == secret["name"]:
+                    print(f"🎉 Correct! It was {secret['name']}. You guessed it in {guesses} questions.")
+                    break
+                else:
+                    print("❌ Wrong guess. Keep trying.")
+                    guesses += 1
+            else:
+                print("Invalid question. Try again.")
+
+if __name__ == "__main__":
+    main()
